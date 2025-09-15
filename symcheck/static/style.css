@@ -13,7 +13,17 @@ body {
   padding: 20px;
 }
 
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+
 .chatbot {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   height: 90%;
   width: 80%;
@@ -30,9 +40,11 @@ body {
 }
 
 .chatbot .chatbox {
+  height: 510px;
   overflow-y: auto;
-  padding: 15px 20px 90px;
+  padding: 15px 20px 70px;
 }
+
 
 .chatbot header {
   background-color: rgb(69, 69, 131);
