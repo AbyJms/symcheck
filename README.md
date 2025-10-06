@@ -1,6 +1,6 @@
 # SymCheck
 
-SymCheck is an AI-based symptom-checking chatbot that uses **Mistral 7B** to suggest possible illnesses based on user input.
+SymCheck is an AI-based symptom-checking chatbot that uses **\_\_\_S** to suggest possible illnesses based on user input.
 
 ## How to Run
 
