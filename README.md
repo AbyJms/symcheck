@@ -2,12 +2,9 @@
 
 SymCheck is an AI-based symptom-checking chatbot that uses **\_\_\_S** to suggest possible illnesses based on user input.
 
-## How to Run
+## Database
 
-1. Clone or download this repository.
-2. (Optional) Create a virtual environment.
-3. Install requirements.
-4. Run the app.
+- Stores few important data while protecting patient privacy
 
 ## Features
 

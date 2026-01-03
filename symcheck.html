@@ -18,64 +18,67 @@
       <button class="login-btn">Login</button>
     </nav>
 
-    <main>
-      <h1>Top Searched Symptoms</h1>
-      <p class="subtitle">
+    <main id="mainContainer">
+      <h1 id="mainTitle">Top Searched Symptoms</h1>
+      <p class="subtitle" id="mainSubtitle">
         Click on any symptom to learn more and get personalized advice
       </p>
 
-      <div class="grid">
+      <div class="grid" id="originalGrid">
         <div class="symptom-card" onclick="openChat('Headache')">
           <h3>Headache</h3>
           <p>Rest in a quiet, dark room. Apply a cold compress...</p>
         </div>
-
         <div class="symptom-card" onclick="openChat('Sore Throat')">
           <h3>Sore Throat</h3>
           <p>Gargle with warm salt water and stay hydrated...</p>
         </div>
-
         <div class="symptom-card" onclick="openChat('Fever')">
           <h3>Fever</h3>
           <p>Stay hydrated and rest as much as possible...</p>
         </div>
-
         <div class="symptom-card" onclick="openChat('Fatigue')">
           <h3>Fatigue</h3>
           <p>Ensure adequate sleep and manage stress levels...</p>
         </div>
-
         <div class="symptom-card" onclick="openChat('Cough')">
           <h3>Cough</h3>
           <p>Drink warm liquids and use honey to soothe your throat...</p>
         </div>
-
         <div class="symptom-card" onclick="openChat('Nausea')">
           <h3>Nausea</h3>
           <p>Eat small, bland meals and stay hydrated...</p>
         </div>
       </div>
+
+      <div class="split-layout" id="splitLayout">
+        <div class="side-column" id="leftCol"></div>
+        <div class="center-column" id="centerCol"></div>
+        <div class="side-column" id="rightCol"></div>
+      </div>
     </main>
 
-    <div class="chat-icon" onclick="toggleChat()">🩺</div>
+    <div class="chat-icon" onclick="toggleSplitMode()">🩺</div>
 
     <div class="chat-box" id="chatBox">
       <div class="chat-header">
         <span>Medical AI Assistant</span>
-        <span class="close-btn" onclick="toggleChat()">×</span>
+        <span class="close-btn" onclick="toggleSplitMode()">×</span>
       </div>
+
       <div class="chat-body" id="chatBody">
-        <div class="chat-message">
-          I’m your AI assistant. How can I help you today?
+        <div class="chat-message" style="text-align: left; background: #f1f9ff">
+          I'm your AI assistant. How can I help you today?
         </div>
       </div>
+
       <div class="chat-input">
         <input
           type="text"
           id="userInput"
           placeholder="Describe your symptoms..."
         />
-        <button onclick="sendMessage()">➤</button>
+        <button onclick="sendMessage()" class="send-btn">➤</button>
       </div>
     </div>
   </body>
