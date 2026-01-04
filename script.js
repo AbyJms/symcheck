@@ -28,20 +28,20 @@ async function submitLogin() {
 
   try {
     const response = await fetch('http://localhost:3000/api/auth', {
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ username: name, password: pass })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: name, password: pass }) // json converts js obj to string to send over the network
     });
     
     const data = await response.json();
 
     if (data.success) {
        currentUserId = data.userId; // Save ID for the chat
-       loginBtn.textContent = data.username;
-       alert(data.msg); 
-       toggleLogin();
+      loginBtn.textContent = data.username;
+      alert(data.msg); 
+      toggleLogin();
     } else {
-       alert(data.message || data.error || "Login Failed");
+      alert(data.message || data.error || "Login Failed");
     }
   } catch (err) {
     console.error(err);
@@ -82,6 +82,7 @@ async function askServer(userText) {
 
     const aiMsg = document.createElement("div");
     aiMsg.className = "chat-message";
+    aiMsg.textAlign = "left";
     aiMsg.style.alignSelf = "flex-start";
     aiMsg.innerText = data.reply; 
     chatBody.appendChild(aiMsg);
