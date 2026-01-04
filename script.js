@@ -1,7 +1,10 @@
-/* LOGIN PAGE LOGIC */
+/* --- GLOBAL VARIABLES --- */
+let currentUserId = null; // Stores the user ID after login
 const loginBtn = document.querySelector('.login-btn'); 
 const modal = document.getElementById('loginModal');
 
+
+/* --- LOGIN LOGIC --- */
 loginBtn.addEventListener('click', () => { toggleLogin(); });
 
 function toggleLogin() {
@@ -17,28 +20,43 @@ modal.addEventListener('click', (e) => {
   if (e.target === modal) toggleLogin();
 });
 
-function submitLogin() {
+async function submitLogin() {
   const name = document.getElementById('loginName').value;
-  loginBtn.textContent = name || "Login";
   const pass = document.getElementById('loginPass').value;
   
-  if(name && pass) {
-    alert(`Welcome, ${name}!`);
-    toggleLogin(); 
-  } else {
-    alert("Please fill in both fields.");
+  if(!name || !pass) { alert("Fill in both!"); return; }
+
+  try {
+    const response = await fetch('http://localhost:3000/api/auth', {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ username: name, password: pass })
+    });
+    
+    const data = await response.json();
+
+    if (data.success) {
+       currentUserId = data.userId; // Save ID for the chat
+       loginBtn.textContent = data.username;
+       alert(data.msg); 
+       toggleLogin();
+    } else {
+       alert(data.message || data.error || "Login Failed");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server error. Is Node running?");
   }
 }
 
 
-/* MAIN PAGE LOGIC */
+/* --- CHAT LOGIC --- */
 
-// 1. Helper Function: Send text to Backend & Show Reply
-// This handles the "Thinking..." bubble and the fetch request
+// Helper: Sends message to backend (WITH USER ID)
 async function askServer(userText) {
   const chatBody = document.getElementById("chatBody");
 
-  // A. Create "Thinking..." bubble
+  // 1. Show "Thinking..." bubble
   const loadingMsg = document.createElement("div");
   loadingMsg.className = "chat-message";
   loadingMsg.style.alignSelf = "flex-start";
@@ -47,22 +65,25 @@ async function askServer(userText) {
   chatBody.scrollTop = chatBody.scrollHeight;
 
   try {
-    // B. Send to Real Server
+    // 2. Send to Server (Passing userId!)
     const response = await fetch('http://localhost:3000/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userText })
+      body: JSON.stringify({ 
+          message: userText,
+          userId: currentUserId // Critical Fix
+      })
     });
 
     const data = await response.json();
 
-    // C. Remove "Thinking..." and show Real Answer
+    // 3. Replace bubble with real answer
     chatBody.removeChild(loadingMsg);
 
     const aiMsg = document.createElement("div");
     aiMsg.className = "chat-message";
     aiMsg.style.alignSelf = "flex-start";
-    aiMsg.innerText = data.reply; // <--- The real answer from Llama 3
+    aiMsg.innerText = data.reply; 
     chatBody.appendChild(aiMsg);
 
   } catch (error) {
@@ -77,8 +98,7 @@ async function askServer(userText) {
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-
-// 2. Open Chat (Clicked a Card)
+// Open Chat from Symptom Card
 function openChat(symptom) {
   if (!document.body.classList.contains("split-active")) {
     toggleSplitMode();
@@ -87,7 +107,7 @@ function openChat(symptom) {
   const chatBody = document.getElementById("chatBody");
   const text = "I have a " + symptom;
 
-  // Show User Message Bubble
+  // Show User Message
   const userMsg = document.createElement("div");
   userMsg.className = "chat-message";
   userMsg.style.background = "#eef";
@@ -97,12 +117,11 @@ function openChat(symptom) {
   chatBody.appendChild(userMsg);
   chatBody.scrollTop = chatBody.scrollHeight;
 
-  // TRIGGER REAL AI (No more setTimeout!)
+  // Call AI
   askServer(text);
 }
 
-
-// 3. Send Message (Typed in Box)
+// Send Message from Input Box
 function sendMessage() {
   const input = document.getElementById("userInput");
   const text = input.value.trim();
@@ -110,7 +129,7 @@ function sendMessage() {
 
   const chatBody = document.getElementById("chatBody");
 
-  // Show User Message Bubble
+  // Show User Message
   const userMsg = document.createElement("div");
   userMsg.className = "chat-message";
   userMsg.style.background = "#eef";
@@ -119,16 +138,15 @@ function sendMessage() {
   userMsg.innerText = text;
   chatBody.appendChild(userMsg);
 
-  // Clear Input
   input.value = "";
   chatBody.scrollTop = chatBody.scrollHeight;
 
-  // TRIGGER REAL AI
+  // Call AI
   askServer(text);
 }
 
 
-// 4. Split Mode UI Logic
+/* --- UI LAYOUT LOGIC --- */
 function toggleSplitMode() {
   const body = document.body;
   const originalGrid = document.getElementById("originalGrid");
@@ -166,7 +184,6 @@ function toggleSplitMode() {
   }
 }
 
-// 5. Enter Key Listener
 document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.getElementById("userInput");
   if (inputField) {
