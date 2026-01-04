@@ -12,7 +12,6 @@ body {
   flex-direction: column;
 }
 
-/* Navbar */
 nav {
   background: #ffffff;
   display: flex;
@@ -43,7 +42,6 @@ nav {
   opacity: 0.8;
 }
 
-/* Main Section */
 main {
   flex: 1;
   padding: 2rem;
@@ -61,7 +59,6 @@ p.subtitle {
   margin-bottom: 2rem;
 }
 
-/* Grid Layout */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -81,7 +78,7 @@ p.subtitle {
 }
 
 .symptom-card:hover {
-  transform: scale(1.005);
+  transform: scale(1.0);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
@@ -96,7 +93,6 @@ p.subtitle {
   font-size: 0.9rem;
 }
 
-/* Chat Icon */
 .chat-icon {
   position: fixed;
   bottom: 25px;
@@ -121,13 +117,12 @@ p.subtitle {
   transform: translateX(-50%) scale(1.1);
 }
 
-/* --- Chat Box Styles (Floating & Fixed) --- */
 .chat-box {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  display: none; /* Hidden by default */
-  flex-direction: column; /* Crucial for sticky input */
+  display: none;
+  flex-direction: column;
   overflow: hidden;
   animation: slideUp 0.5s ease;
   

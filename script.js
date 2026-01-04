@@ -1,3 +1,9 @@
+const login = document.querySelector('.login-btn');
+
+login.addEventListener('click', () => {
+  window.location.href = 'login.html';
+});
+
 function toggleSplitMode() {
   const body = document.body;
   const originalGrid = document.getElementById("originalGrid");
