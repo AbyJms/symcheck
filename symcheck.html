@@ -81,5 +81,26 @@
         <button onclick="sendMessage()" class="send-btn">➤</button>
       </div>
     </div>
+
+    <div class="modal-overlay" id="loginModal">
+      <div class="modal-box">
+        <span class="close-btn" onclick="toggleLogin()">×</span>
+        <h2>Welcome Back</h2>
+
+        <div class="input-group">
+          <label>Name</label>
+          <input type="text" placeholder="Enter your name" id="loginName" />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" placeholder="Enter password" id="loginPass" />
+        </div>
+
+        <button class="signin-btn" onclick="submitLogin()">Sign In</button>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
   </body>
 </html>

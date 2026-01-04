@@ -1,8 +1,45 @@
-const login = document.querySelector('.login-btn');
+/* LOGIN PAGE */
+// 1. Grab the elements
+const loginBtn = document.querySelector('.login-btn'); // The button in your navbar
+const modal = document.getElementById('loginModal');
 
-login.addEventListener('click', () => {
-  window.location.href = 'login.html';
+// 2. Open Modal Function
+loginBtn.addEventListener('click', () => {
+  toggleLogin();
 });
+
+// 3. Toggle Logic (Open/Close)
+function toggleLogin() {
+  const isOpen = modal.classList.contains('open');
+  
+  if (!isOpen) {
+    modal.classList.add('open');
+  } else {
+    modal.classList.remove('open');
+  }
+}
+
+// 4. Close if user clicks OUTSIDE the box (on the dark background)
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    toggleLogin();
+  }
+});
+
+// 5. Handle Sign In (Fake for now)
+function submitLogin() {
+  const name = document.getElementById('loginName').value;
+  const pass = document.getElementById('loginPass').value;
+  
+  if(name && pass) {
+    alert(`Welcome, ${name}!`);
+    toggleLogin(); // Close the box
+  } else {
+    alert("Please fill in both fields.");
+  }
+}
+
+/* MAIN PAGE*/
 
 function toggleSplitMode() {
   const body = document.body;
@@ -67,6 +104,7 @@ function openChat(symptom) {
   setTimeout(() => {
     const aiMsg = document.createElement("div");
     aiMsg.className = "chat-message";
+    aiMsg.style.textAlign = "left";
     aiMsg.style.alignSelf = "flex-start";
     aiMsg.innerText = `I see you're experiencing ${symptom.toLowerCase()}. Can you tell me more about it?`;
     chatBody.appendChild(aiMsg);
@@ -96,6 +134,7 @@ function sendMessage() {
   setTimeout(() => {
     const aiMsg = document.createElement("div");
     aiMsg.className = "chat-message";
+    aiMsg.style.textAlign = "left";
     aiMsg.style.alignSelf = "flex-start";
     aiMsg.innerText = "I understand. Can you tell me how long you've felt this way?";
     chatBody.appendChild(aiMsg);
