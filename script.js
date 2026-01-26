@@ -1,10 +1,8 @@
-/* --- GLOBAL VARIABLES --- */
-let currentUserId = null; // Stores the user ID after login
+let currentUserId = null;
 const loginBtn = document.querySelector('.login-btn'); 
 const modal = document.getElementById('loginModal');
 
 
-/* --- LOGIN LOGIC --- */
 loginBtn.addEventListener('click', () => { toggleLogin(); });
 
 function toggleLogin() {
@@ -36,7 +34,7 @@ async function submitLogin() {
     const data = await response.json();
 
     if (data.success) {
-       currentUserId = data.userId; // Save ID for the chat
+      currentUserId = data.userId;
       loginBtn.textContent = data.username;
       alert(data.msg); 
       toggleLogin();
@@ -49,14 +47,9 @@ async function submitLogin() {
   }
 }
 
-
-/* --- CHAT LOGIC --- */
-
-// Helper: Sends message to backend (WITH USER ID)
 async function askServer(userText) {
   const chatBody = document.getElementById("chatBody");
 
-  // 1. Show "Thinking..." bubble
   const loadingMsg = document.createElement("div");
   loadingMsg.className = "chat-message";
   loadingMsg.style.alignSelf = "flex-start";
@@ -65,19 +58,18 @@ async function askServer(userText) {
   chatBody.scrollTop = chatBody.scrollHeight;
 
   try {
-    // 2. Send to Server (Passing userId!)
     const response = await fetch('http://localhost:3000/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
           message: userText,
-          userId: currentUserId // Critical Fix
+          userId: currentUserId
       })
     });
 
     const data = await response.json();
 
-    // 3. Replace bubble with real answer
+    // Replace the "thinking" thing
     chatBody.removeChild(loadingMsg);
 
     const aiMsg = document.createElement("div");
@@ -99,7 +91,6 @@ async function askServer(userText) {
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-// Open Chat from Symptom Card
 function openChat(symptom) {
   if (!document.body.classList.contains("split-active")) {
     toggleSplitMode();
@@ -108,7 +99,6 @@ function openChat(symptom) {
   const chatBody = document.getElementById("chatBody");
   const text = "I have a " + symptom;
 
-  // Show User Message
   const userMsg = document.createElement("div");
   userMsg.className = "chat-message";
   userMsg.style.background = "#eef";
@@ -117,12 +107,9 @@ function openChat(symptom) {
   userMsg.innerText = text;
   chatBody.appendChild(userMsg);
   chatBody.scrollTop = chatBody.scrollHeight;
-
-  // Call AI
-  askServer(text);
+  askServer(text); // calling groq
 }
 
-// Send Message from Input Box
 function sendMessage() {
   const input = document.getElementById("userInput");
   const text = input.value.trim();
@@ -130,7 +117,6 @@ function sendMessage() {
 
   const chatBody = document.getElementById("chatBody");
 
-  // Show User Message
   const userMsg = document.createElement("div");
   userMsg.className = "chat-message";
   userMsg.style.background = "#eef";
@@ -141,13 +127,9 @@ function sendMessage() {
 
   input.value = "";
   chatBody.scrollTop = chatBody.scrollHeight;
-
-  // Call AI
   askServer(text);
 }
 
-
-/* --- UI LAYOUT LOGIC --- */
 function toggleSplitMode() {
   const body = document.body;
   const originalGrid = document.getElementById("originalGrid");
