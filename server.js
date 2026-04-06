@@ -10,7 +10,7 @@ const port = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(__dirname));
+app.use(express.static(__dirname)); // load all directories
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -55,8 +55,18 @@ async function saveNewSummary(userId, oldSummary, userMsg, aiMsg) {
     Patient: "${userMsg}"
     Doctor: "${aiMsg}"
     
-    Task: Create a NEW updated summary that merges the old info with this new interaction. 
-    Keep it under 50 words.
+    [TASK]: Update the patient's medical summary based on the new chat.
+    
+    [RULES]:
+    1. CHECK FOR RECOVERY: If the patient says they are "cured", "better", "relieved", or "fine" regarding a specific symptom, REMOVE that symptom from the summary completely.
+    2. PROTECT CRITICAL DATA: NEVER remove mentions of:
+    - Allergies
+    - Name and age
+    - Chronic Conditions (Diabetes, Asthma, etc.)
+    - Long-term medications
+    - Surgeries
+    3. MERGE: If it's a new issue or ongoing problem, add it to the summary.
+    4. LIMIT: Keep the final result concise (under 50 words).
     `;
 
     try {

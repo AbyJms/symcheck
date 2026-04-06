@@ -25,7 +25,7 @@ async function submitLogin() {
   if(!name || !pass) { alert("Fill in both!"); return; }
 
   try {
-    const response = await fetch('http://localhost:3000/api/auth', {
+    const response = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: name, password: pass }) // json converts js obj to string to send over the network
@@ -43,7 +43,7 @@ async function submitLogin() {
     }
   } catch (err) {
     console.error(err);
-    alert("Server error. Is Node running?");
+    alert("Server error.");
   }
 }
 
@@ -58,7 +58,7 @@ async function askServer(userText) {
   chatBody.scrollTop = chatBody.scrollHeight;
 
   try {
-    const response = await fetch('http://localhost:3000/api/chat', {
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -70,7 +70,9 @@ async function askServer(userText) {
     const data = await response.json();
 
     // Replace the "thinking" thing
-    chatBody.removeChild(loadingMsg);
+    if (loadingMsg.parentNode) {
+      chatBody.removeChild(loadingMsg);
+    }
 
     const aiMsg = document.createElement("div");
     aiMsg.className = "chat-message";
@@ -80,7 +82,9 @@ async function askServer(userText) {
     chatBody.appendChild(aiMsg);
 
   } catch (error) {
-    chatBody.removeChild(loadingMsg);
+    if (loadingMsg.parentNode) {
+      chatBody.removeChild(loadingMsg);
+    }
     const errorMsg = document.createElement("div");
     errorMsg.className = "chat-message";
     errorMsg.style.color = "red";
