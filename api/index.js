@@ -24,7 +24,7 @@ const pool = new Pool({
 });
 
 // AUTH
-app.post("/api/auth", async (req, res) => {
+app.post("/auth", async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -103,7 +103,7 @@ Doctor: "${aiMsg}"
 }
 
 // CHAT
-app.post("/api/chat", async (req, res) => {
+app.post("/chat", async (req, res) => {
   const { message, userId } = req.body;
 
   try {
